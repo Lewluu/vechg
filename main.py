@@ -9,9 +9,9 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(max_num_hands = 1, min_detection_confidence = 0.7)
 mp_draw = mp.solutions.drawing_utils
 
-model = load_model('HandGestureDetection/mp_hand_gesture')
+model = load_model('src/HandGestureDetection/mp_hand_gesture')
 
-f = open('HandGestureDetection/gesture.names', 'r')
+f = open('src/HandGestureDetection/gesture.names', 'r')
 class_names = f.read().split('\n')
 
 f.close()
