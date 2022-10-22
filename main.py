@@ -43,7 +43,7 @@ while True:
             mp_draw.draw_landmarks(frame, hands_lms, mp_hands.HAND_CONNECTIONS)
         
         prediction = model.predict([landmarks])
-        # print(prediction)
+        print(prediction)
         class_id = np.argmax(prediction)
         class_name = class_names[class_id]
 
