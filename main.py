@@ -1,56 +1,58 @@
-from cgitb import reset
+from ctypes.wintypes import RGB
+from unittest import result
 import cv2
-import numpy as np
 import mediapipe as mp
-import tensorflow as tf
-from tensorflow.keras.models import load_model
-
-mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(max_num_hands = 1, min_detection_confidence = 0.7)
-mp_draw = mp.solutions.drawing_utils
-
-model = load_model('src/HandGestureDetection/mp_hand_gesture')
-
-f = open('src/HandGestureDetection/gesture.names', 'r')
-class_names = f.read().split('\n')
-
-f.close()
-print(class_names)
 
 cap = cv2.VideoCapture(0)
+mp_hands = mp.solutions.hands
+hands = mp_hands.Hands()
+mp_draw = mp.solutions.drawing_utils
+finger_coords = [(8, 6, "index finger"), (12, 10, "middle finger"), (16, 14, "ring finger"), (20, 18, "pinky finger")]
+thumb_coord = (4, 2, "thumb")
 
 while True:
-    ret, frame = cap.read()
-    x, y, c = frame.shape
+    success, image = cap.read()
+    image = cv2.flip(image, 1)
 
-    if ret is not True:
-        print("Failed to load camera ...")
+    if not success:
+        print("Failed to load video capture ...")
         break
 
-    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    result = hands.process(frame_rgb)
-    class_name = ''
+    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    results = hands.process(rgb)
+    multi_land_marks = results.multi_hand_landmarks
 
-    if result.multi_hand_landmarks:
-        landmarks = []
-        for hands_lms in result.multi_hand_landmarks:
-            for lm in hands_lms.landmark:
-                lm_x = int(lm.x * x)
-                lm_y = int(lm.y * y)
+    if multi_land_marks:
+        hand_list = []
 
-                landmarks.append([lm_x, lm_y])
+        for hand_lms in  multi_land_marks:
+            mp_draw.draw_landmarks(image, hand_lms, mp_hands.HAND_CONNECTIONS)
 
-            mp_draw.draw_landmarks(frame, hands_lms, mp_hands.HAND_CONNECTIONS)
+            for idx, lm in enumerate(hand_lms.landmark):
+                h, w, c = image.shape
+                cx, cy = int(lm.x * w), int(lm.y * h)
+                hand_list.append((cx, cy))
+
+        for point in  hand_list:
+            cv2.circle(image, point, 10, (255, 255, 0), cv2.FILLED)
+            fingers_showing = []
+
+            for coord in finger_coords:
+                if hand_list[coord[0]][1] < hand_list[coord[1]][1]:
+                    fingers_showing.append(coord[2])
+            if hand_list[thumb_coord[0]][0] > hand_list[thumb_coord[1]][0]:
+                fingers_showing.append(thumb_coord[2])
         
-        prediction = model.predict([landmarks])
-        print(prediction)
-        class_id = np.argmax(prediction)
-        class_name = class_names[class_id]
-
-        cv2.putText(frame, class_name, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
-
-    cv2.imshow("vechg", frame)
-    if cv2.waitKey(1) == 27:    break
+        h = 50
+        for finger in fingers_showing:
+            cv2.putText(image, finger, (15, h), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+            h += 50
+        
+    cv2.imshow("Counting  number of fingers", image)
+    if cv2.waitKey(1) == 27: break
 
 cap.release()
 cv2.destroyAllWindows()
+
+    
+
