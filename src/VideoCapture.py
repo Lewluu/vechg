@@ -1,14 +1,36 @@
-from ctypes.wintypes import RGB
-from unittest import result
 import cv2
 import mediapipe as mp
 
-cap = cv2.VideoCapture(0)
-mp_hands = mp.solutions.hands
-hands = mp_hands.Hands()
-mp_draw = mp.solutions.drawing_utils
-finger_coords = [(8, 6, "index finger"), (12, 10, "middle finger"), (16, 14, "ring finger"), (20, 18, "pinky finger")]
-thumb_coord = (4, 2, "thumb")
+class VideoCapture:
+    def __init__(self):
+        self._cap = cv2.VideoCapture(0)
+        self._mp_hands = mp.solutions.hands
+        self._hands = self._mp_hands.Hands()
+        self._mp_draw = mp.solutions.drawing_utils
+        self._finger_coords = [(8, 6, "index finger"), (12, 10, "middle finger"), (16, 14, "ring finger"), (20, 18, "pinky finger")]
+        self._thumb_coord = (4, 2, "thumb")
+    
+    def Run(self):
+        while True:
+            success, image = self._cap.read()
+            image = cv2.flip(image, 1)
+
+            if not success:
+                print("Failed to load video capture ...")
+                break
+
+            rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            results = self._hands.process(rgb)
+            multi_land_marks = results.multi_hand_landmarks
+
+            if multi_land_marks:
+                hand_list = []
+
+                for hand_lms in multi_land_marks:
+                    self._mp_draw.draw_landmarks(image, hand_lms, self._mp_hands.HANDS_CONNECTIONS)
+                    
+        
+
 
 while True:
     success, image = cap.read()
