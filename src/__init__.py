@@ -1,1 +1,1 @@
-from src.Camera import Camera
+from src.WebCam import WebCam

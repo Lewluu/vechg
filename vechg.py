@@ -1,7 +1,7 @@
-from src import Camera
+from src import WebCam
 
-cam = Camera()
+webcam = WebCam()
 
 if __name__ == "__main__":
-    cam.Run()
-    cam.Exit()
+    webcam.Run()
+    webcam.Exit()
