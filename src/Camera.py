@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 
-class VideoCapture:
+class Camera:
     def __init__(self):
         self._cap = cv2.VideoCapture(0)
         self._mp_hands = mp.solutions.hands

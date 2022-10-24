@@ -1,7 +1,7 @@
-from src import VideoCapture
+from src import Camera
 
-vc = VideoCapture()
+cam = Camera()
 
 if __name__ == "__main__":
-    vc.Run()
-    vc.Exit()
+    cam.Run()
+    cam.Exit()
