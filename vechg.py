@@ -1,4 +1,7 @@
+from src import VideoCapture
 
+vc = VideoCapture()
 
 if __name__ == "__main__":
-    print("Hello World, from VECHG!")
+    vc.Run()
+    vc.Exit()
