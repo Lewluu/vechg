@@ -833,10 +833,16 @@ def setup():
 
 class Scene3D:
     def __init__(self, w, h, posx, posy):
-        window = Window(width=w, height=h, caption='3D Scene',resizable=True)
-        window.set_location(posx, posy)
+
+        self._w = w
+        self._h = h
+        self._posx = posx
+        self._posy = posy
+
+    def Run(self):
+        window = Window(width = self._w, height = self._h, caption = "3D Scene", resizable = True)
+        window.set_location(self._posx, self._posy)
         window.set_exclusive_mouse(True)
         setup()
 
-    def Run(self):
         pyglet.app.run()
