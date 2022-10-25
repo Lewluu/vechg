@@ -1,4 +1,5 @@
 from __future__ import division
+from curses import window
 
 import sys
 import math
@@ -837,6 +838,11 @@ def main():
     setup()
     pyglet.app.run()
 
+class Scene3D:
+    def __init__(self):
+        window = Window(width=800, height=600, caption='3D Scene', resizable=True)
+        window.set_exclusive_mouse(True)
+        setup()
 
-if __name__ == '__main__':
-    main()
+    def Run(self):
+        pyglet.app.run()
