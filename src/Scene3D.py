@@ -1,5 +1,6 @@
 from __future__ import division
 from curses import window
+from os import getcwd
 
 import sys
 import math
@@ -7,6 +8,7 @@ import random
 import time
 
 from collections import deque
+from turtle import pos
 from pyglet import image
 from pyglet.gl import *
 from pyglet.graphics import TextureGroup
@@ -71,8 +73,7 @@ def tex_coords(top, bottom, side):
     result.extend(side * 4)
     return result
 
-
-TEXTURE_PATH = 'texture.png'
+TEXTURE_PATH = getcwd() + '\\src\\texture.png'
 
 GRASS = tex_coords((1, 0), (0, 1), (0, 0))
 SAND = tex_coords((1, 1), (1, 1), (1, 1))
@@ -830,17 +831,10 @@ def setup():
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
     setup_fog()
 
-
-def main():
-    window = Window(width=800, height=600, caption='Pyglet', resizable=True)
-    # Hide the mouse cursor and prevent the mouse from leaving the window.
-    window.set_exclusive_mouse(True)
-    setup()
-    pyglet.app.run()
-
 class Scene3D:
-    def __init__(self):
-        window = Window(width=800, height=600, caption='3D Scene', resizable=True)
+    def __init__(self, w, h, posx, posy):
+        window = Window(width=w, height=h, caption='3D Scene',resizable=True)
+        window.set_location(posx, posy)
         window.set_exclusive_mouse(True)
         setup()
 
