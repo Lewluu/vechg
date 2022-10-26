@@ -1,25 +1,29 @@
-import multiprocessing
-from multiprocessing.dummy import freeze_support
+import threading
+import time
 from src import WebCam
 from src import Scene3D
 
 webcam = WebCam()
 scene3D = Scene3D(800, 600, 50, 50)
 
-p1 = multiprocessing.Process(target=webcam.Run())
-p2 = multiprocessing.Process(target=scene3D.Run())
-
-# p1.join()
-# p2.start()
+def webcamThreadFunc():
+    webcam.Run()
+    webcam.Exit()
 
 if __name__ == "__main__":
 
-    freeze_support()
+    try:
+        webcam_thread = threading.Thread(target=webcamThreadFunc, args=())
+    except Exception as e:
+        print(e)
+        exit()
 
-    p1.start()
-    p2.start()
+    webcam_thread.start()
 
-    # p1.join()
-    # p2.join()
+    scene3D.Run()
 
-    # webcam.Exit()
+    webcam_thread.join()
+    
+
+    
+    
