@@ -9,6 +9,8 @@ class WebCam:
         self._mp_draw = mp.solutions.drawing_utils
         self._finger_coords = [(8, 6, "index finger"), (12, 10, "middle finger"), (16, 14, "ring finger"), (20, 18, "pinky finger")]
         self._thumb_coord = (4, 2, "thumb")
+        self._fingers_showing = []
+        self._closed = False
     
     def Run(self):
         while True:
@@ -44,13 +46,23 @@ class WebCam:
                     if hand_list[self._thumb_coord[0]][0] > hand_list[self._thumb_coord[1]][0]:
                         fingers_showing.append(self._thumb_coord[2])
                 
+                self._fingers_showing = fingers_showing
+                
                 h = 50
                 for finger in fingers_showing:
                     cv2.putText(image, finger, (15, h), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
                     h += 50
 
             cv2.imshow("VECHG Window", image)
-            if cv2.waitKey(1) == 27:    break
+            if cv2.waitKey(1) == 27:
+                self._closed = True
+                break
+
+    def isCameraClosed(self):
+        return self._closed
+    
+    def GetGestures(self):
+        return self._fingers_showing
     
     def Exit(self):
         self._cap.release()

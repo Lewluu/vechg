@@ -833,7 +833,6 @@ def setup():
 
 class Scene3D:
     def __init__(self, w, h, posx, posy):
-
         self._w = w
         self._h = h
         self._posx = posx
