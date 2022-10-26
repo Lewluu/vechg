@@ -61,7 +61,7 @@ class WebCam:
     def isCameraClosed(self):
         return self._closed
     
-    def GetGestures(self):
+    def getFingers(self):
         return self._fingers_showing
     
     def Exit(self):

@@ -2,6 +2,7 @@ import threading
 import time
 from src import WebCam
 from src import Scene3D
+from src import Gesture
 
 webcam = WebCam()
 scene3D = Scene3D(800, 600, 50, 50)
@@ -12,7 +13,9 @@ def webcamThreadFunc():
 
 def gesturesThreadFunc():
     while True:
-        print(webcam.GetGestures())
+        Gesture.setGesture(webcam.getFingers())
+        print(Gesture.getGesture())
+
         time.sleep(0.1)
 
         # stop the thread when camera is closed
