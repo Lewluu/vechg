@@ -14,6 +14,8 @@ from pyglet.gl import *
 from pyglet.graphics import TextureGroup
 from pyglet.window import key, mouse
 
+from src.Gesture import Gesture
+
 TICKS_PER_SEC = 60
 
 # Size of sectors used to ease block loading.
@@ -523,6 +525,24 @@ class Window(pyglet.window.Window):
             dx = 0.0
             dz = 0.0
         return (dx, dy, dz)
+    
+    def _updateGesture(self):
+        gesture = Gesture.getGesture()
+
+        if gesture == "FORWARD":
+            self.strafe[0] -= 1
+        elif gesture == "BACKWARD":
+            self.strafe[0] += 1
+        elif gesture == "LEFT":
+            self.strafe[1] -= 1
+        elif gesture == "RIGHT":
+            self.strafe[1] += 1
+        elif gesture == "JUMP":
+            if self.dy == 0:
+                self.dy = JUMP_SPEED
+        elif gesture == "NONE":
+            self.strafe[0] = 0
+            self.strafe[1] = 0
 
     def update(self, dt):
         """ This method is scheduled to be called repeatedly by the pyglet
@@ -532,6 +552,9 @@ class Window(pyglet.window.Window):
         dt : float
             The change in time since the last call.
         """
+        # update movement based on gestures
+        self._updateGesture()
+
         self.model.process_queue()
         sector = sectorize(self.position)
         if sector != self.sector:
@@ -671,6 +694,7 @@ class Window(pyglet.window.Window):
         modifiers : int
             Number representing any modifying keys that were pressed.
         """
+
         if symbol == key.W:
             self.strafe[0] -= 1
         elif symbol == key.S:

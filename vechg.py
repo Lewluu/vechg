@@ -14,7 +14,7 @@ def webcamThreadFunc():
 def gesturesThreadFunc():
     while True:
         Gesture.setGesture(webcam.getFingers())
-        print(Gesture.getGesture())
+        # print(Gesture.getGesture())
 
         time.sleep(0.1)
 
