@@ -529,6 +529,7 @@ class Window(pyglet.window.Window):
     def _updateGesture(self):
         gesture = Gesture.getGesture()
 
+        # movement gestures
         if gesture == "FORWARD":
             self.strafe[0] -= 1
         elif gesture == "BACKWARD":
@@ -543,6 +544,24 @@ class Window(pyglet.window.Window):
         elif gesture == "NONE":
             self.strafe[0] = 0
             self.strafe[1] = 0
+        
+        # rotating gestures
+        x, y = self.rotation
+
+        if gesture == "ROTATE LEFT":
+            x, y = self.rotation
+            x -= 1.0
+        if gesture == "ROTATE RIGHT":
+            x, y = self.rotation
+            x += 1.0
+        if gesture == "ROTATE UP":
+            x, y = self.rotation
+            y += 1.0
+        if gesture == "ROTATE DOWN":
+            x, y = self.rotation
+            y -= 1.0
+        
+        self.rotation = (x, y)
 
     def update(self, dt):
         """ This method is scheduled to be called repeatedly by the pyglet

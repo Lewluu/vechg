@@ -19,6 +19,10 @@ class Gesture:
             _gesture = "ROTATE LEFT"
         if fingers == ['index finger', 'thumb']:
             _gesture = "ROTATE RIGHT"
+        if fingers == ['index finger', 'middle finger', 'thumb']:
+            _gesture = "ROTATE UP"
+        if fingers == ['index finger', 'middle finger', 'pinky finger']:
+            _gesture = "ROTATE DOWN"
     
     def getGesture():
         return _gesture
